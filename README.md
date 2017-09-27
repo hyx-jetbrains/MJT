@@ -1,57 +1,44 @@
-**demo**: [github](https://taylorchen709.github.io/vue-admin/)
-
 # MJT
 
-银行运维管理系统--明镜台 (https://)
+银行运维管理系统--MJT (https://github.com/kookokukyo/MJT)
 
 ``` bash
-# install dependencies
+# install dependencies  安装依赖
 npm install
 
-# serve with hot reload at localhost:8081
+# serve with hot reload at localhost:8081  启动开发环境
 npm run dev
 
-# build for production with minification
+# build for production with minification  启动生产环境
 npm run build
 
 ```
 
-# 文件树
+# 文件结构
 * build - webpack config files
 * config - webpack config files
 * dist - build
-* src -your app
+* src - app
     * api
     * assets
     * common
-    * components - your vue components
-    * mock
+    * components - vue 组件
+    * mock - 前后端完全分离数据请求模拟工具
     * styles
-    * views - your pages
+    * views - 页面
     * vuex
     * App.vue
     * main.js - main file
     * routes.js
 * static - static assets
 
-# 主题
-主题改变方法 
-1. Generate theme packages by [https://elementui.github.io/theme-preview/#/](https://elementui.github.io/theme-preview/#/)
-2. Put theme packages in src/assets/theme/
-3. Edit src/main.js 
-``` bash
-   import 'element-ui/lib/theme-default/index.css'
-   to
-   import './assets/theme/your-theme/index.css'
-```
-4. Edit src/styles/vars.scss
+# 截图
+![登陆界面](http://chuantu.biz/t6/68/1506529923x1743814436.png)
 
-![theme-blue](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/rec-demo.gif)
-![theme-green](https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/theme-green.png)
 
 # 浏览器兼容性
 
-现代浏览器及 IE 10+.
+所有现代浏览器及IE10+.
 
 # 开发者
-[KOOKOKUKYO](http://opensource.org/licenses/MIT)
+[KOOKOKUKYO](https://github.com/kookokukyo)
