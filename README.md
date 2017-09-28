@@ -34,6 +34,7 @@ npm run build
 
 # 截图
 ![登陆界面](http://chuantu.biz/t6/68/1506529923x1743814436.png)
+![首页界面](http://chuantu.biz/t6/70/1506602467x1743814436.png)
 
 
 # 浏览器兼容性
