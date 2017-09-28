@@ -2,7 +2,8 @@
 	<el-row class="container">
 		<el-col :span="24" class="header">
 			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				<span class='tit animated bounceIn'>{{collapsed?'':sysName}}</span>
+				<img src="../../static/img/logo.png" alt="" class='animated rotateIn'>
+				<span class='tit animated flipInX'>{{collapsed?'':sysName}}</span>
 			</el-col>
 			<el-col :span="10">
 				<div class="tools" @click.prevent="collapse">
@@ -77,7 +78,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'明镜台管理系统',
+				sysName:'监 控 管 理',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -94,6 +95,9 @@
 			}
 		},
 		methods: {
+		  rotate(){
+		    alert(1)
+			},
 			onSubmit() {
 				console.log('submit!');
 			},
@@ -120,8 +124,15 @@
 
 			},
 			//折叠导航栏
+			change(){
+		    alert(1)
+			},
 			collapse:function(){
 				this.collapsed=!this.collapsed;
+				//修改BUG:宽度无法正常切换问题
+				if(this.collapsed!=true){
+					document.getElementsByClassName('el-menu')[0].style.width = '230px';
+				}
 			},
 			showMenu(i,status){
 				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
@@ -145,10 +156,21 @@
 	.tit{
 		display: block;
 		font-weight: 500;
+		font-size: 20px;
+		text-align: left;
+		text-indent: -8px;
 	}
+
 	.tit:hover{
-		color: #11b95c;
 		cursor: pointer;
+	}
+	.logo img{
+		display: inline-block;
+		height: 40px;
+		position: relative;
+		top: -5px;
+		left: -18px;
+		
 	}
 	.container {
 		position: absolute;
@@ -156,8 +178,8 @@
 		bottom: 0px;
 		width: 100%;
 		.header {
-			height: 60px;
-			line-height: 60px;
+			height: 50px;
+			line-height: 50px;
 			background: $color-primary;
 			color:#fff;
 			.userinfo {
@@ -168,10 +190,11 @@
 					cursor: pointer;
 					color:#fff;
 					img {
-						width: 40px;
-						height: 40px;
+						width: 30px;
+						height: 30px;
 						border-radius: 20px;
-						margin: 10px 0px 10px 10px;
+						margin-top: 10px;
+						margin-left: 5px;
 						float: right;
 					}
 				}
@@ -179,10 +202,10 @@
 			.logo {
 				//width:230px;
 				text-align: center;
-				height:60px;
+				height:50px;
 				font-size: 22px;
-				padding-left:20px;
-				padding-right:20px;
+				padding-left:10px;
+				/*padding-right:20px;*/
 				border-color: rgba(238,241,146,0.3);
 				border-right-width: 1px;
 				border-right-style: solid;
@@ -204,8 +227,8 @@
 			.tools{
 				padding: 0px 23px;
 				width:14px;
-				height: 60px;
-				line-height: 60px;
+				height: 50px;
+				line-height: 50px;
 				cursor: pointer;
 			}
 		}
@@ -213,7 +236,7 @@
 			display: flex;
 			// background: #324057;
 			position: absolute;
-			top: 60px;
+			top: 50px;
 			bottom: 0px;
 			overflow: hidden;
 			aside {

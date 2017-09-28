@@ -1,7 +1,7 @@
 import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
-import Home from './views/Home.vue'
-// import Main from './views/Main.vue'
+import Watch from './views/Watch.vue'
+import Index from './views/Index.vue'
 import Jvm from './views/config/jvm.vue'
 import Os from './views/config/os.vue'
 import Blackbox from './views/config/blackbox.vue'
@@ -18,35 +18,46 @@ let routes = [
         name: '',
         hidden: true
     },
+    { path: '/Watch', component: Watch,hidden:true},
+    {
+      path: '/',
+      component: Index,
+      name: '首页',
+      iconCls: 'el-icon-menu',
+      leaf: true,
+      children: [
+        { path: '/Index', component: Index, name: '主页' }
+      ]
+    },
     {
         path: '/404',
         component: NotFound,
         name: '',
         hidden: true
     },
-    // { path: '/main', component: Main },
     {
       path: '/',
-      component: Home,
+      component: Watch,
       name: 'Dashboard',
       iconCls: 'el-icon-menu',
+      leaf: true,
       children: [
         { path: '/dashboard', component: Dashboard, name: 'Dashboard' }
       ]
     },
     {
       path: '/',
-      component: Home,
+      component: Watch,
       name: 'Prometheus',
       iconCls: 'el-icon-date',
-      // leaf: true,//只有一个节点
+      leaf: true,//只有一个节点
       children: [
         { path: '/prometheus', component: Prometheus, name: 'Prometheus' }
       ]
     },
     {
         path: '/',
-        component: Home,
+        component: Watch,
         name: '配置',
         iconCls: 'el-icon-setting',//图标样式class
         children: [
@@ -59,7 +70,7 @@ let routes = [
     },
     {
         path: '/',
-        component: Home,
+        component: Watch,
         name: '拓扑',
         iconCls: 'el-icon-more',
         children: [
