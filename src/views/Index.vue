@@ -24,11 +24,11 @@
 		</el-col>
 		<div class='search'>
 			<el-input placeholder="请输入内容"  v-model="input5">
-				<el-select class='config' v-model="select" slot="prepend" placeholder="请选择">
-					<el-option label="配置1" value="1"></el-option>
-					<el-option label="配置2" value="2"></el-option>
-					<el-option label="配置3" value="3"></el-option>
-				</el-select>
+				<!--<el-select class='config' v-model="select" slot="prepend" placeholder="请选择">-->
+					<!--<el-option label="配置1" value="1"></el-option>-->
+					<!--<el-option label="配置2" value="2"></el-option>-->
+					<!--<el-option label="配置3" value="3"></el-option>-->
+				<!--</el-select>-->
 				<el-button slot="append" icon="search"></el-button>
 			</el-input>
 		</div>
