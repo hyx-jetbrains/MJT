@@ -78,74 +78,143 @@
 
 		<!--新增界面-->
 		<el-dialog title="新增配置" v-model="addFormVisible" :close-on-click-modal="true" >
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
+			<el-form :model="addForm" label-width="50px" :rules="addFormRules" ref="addForm">
+				<el-form-item label="标题:" prop="title">
+					<el-input v-model="addForm.name" auto-complete="on"></el-input>
 				</el-form-item>
-				<el-form-item label="Type">
+				<el-form-item label="TYPE:">
 				<span class="wrapper">
-    				<el-button :plain="true" type="success" @click='sel1'>Jvm</el-button>
-    				<el-button :plain="true" type="success" @click='sel2'>Blackbox</el-button>
+    				<el-button :plain="or1" type="success" @click='sel1'>Jvm</el-button>
+    				<el-button :plain="or2" type="success" @click='sel2'>Blackbox</el-button>
   			</span>
 				</el-form-item>
-				<div class='jvm' v-show='show'>
-					<el-collapse v-model="activeName" accordion>
-						<el-collapse-item title="一致性 Consistency" name="1">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="反馈 Feedback" name="2">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="效率 Efficiency" name="3">
-							<div>1</div>
-							<div>2</div>
-							<div>3</div>
-						</el-collapse-item>
-						<el-collapse-item title="可控 Controllability" name="4">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="一致性 Consistency" name="5">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="反馈 Feedback" name="6">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="反馈 Feedback" name="7">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="反馈 Feedback" name="8">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-					</el-collapse>
+				
+				
+				<!--jvm-->
+				<div class='jvm'>
+					<span>job_name:</span>
+					<el-input placeholder="请输入内容" v-model="jvm1"></el-input>
+					<br>
+					<span>metrics_path:</span>
+					<el-input placeholder="请输入内容" v-model="jvm2"></el-input>
+					<br>
+					<span style='margin-bottom: 10px;'>static_configs:</span><br>
+					<el-button type="primary" class='add' size="mini" @click='addDomain'>增加一条static配置信息</el-button>
+					<div class='tar'>
+						<el-form v-for="(domain, index) in dynamicValidateForm.domains" :model="dynamicValidateForm" id='more' style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+							<el-collapse v-model="activeNames" id='clone' @change="handleChange">
+								<el-collapse-item title="配置static_configs" name="1">
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
+										<option value="bloan-rcpm1">bloan-rcpm1</option>
+										<option value="bloan-rcpm2">bloan-rcpm2</option>
+										<option value="bloan-rcpm3">bloan-rcpm3</option>
+										<option value="bloan-rcpm4">bloan-rcpm4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select style='margin-bottom:5px;'>
+										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<br>
+									<input type="button" value='targets:' disabled style='width: 60px;font-size: 14px'>
+									<input type="text" id='addurl' style='margin-bottom: 10px;' placeholder='请输入IP地址+端口信息'>
+									<em class='addurl' @click="addurl">+</em>
+									<br>
+									<ul id='list'></ul>
+								</el-collapse-item>
+							</el-collapse>
+						</el-form>
+					</div>
 				</div>
-				<div class='blackbox' v-show='hide'>
-					<el-collapse v-model="activeName" accordion>
-						<el-collapse-item title="一致性 Consistency" name="1">
-							<div>11</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="反馈 Feedback" name="2">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-						<el-collapse-item title="效率 Efficiency" name="3">
-							<div>1</div>
-							<div>2</div>
-							<div>3</div>
-						</el-collapse-item>
-						<el-collapse-item title="可控 Controllability" name="4">
-							<div>1</div>
-							<div>2</div>
-						</el-collapse-item>
-					</el-collapse>
+				
+				
+				
+				<!--blackbox-->
+				<div class='blackbox jvm'>
+					<span style='margin-right: 15px;'>job_name:</span>
+					<el-input placeholder="请输入内容" v-model="jvm11"></el-input>
+					<br>
+					<span style='margin-right: 15px;'>scrape_interval:</span>
+					<el-input placeholder="请输入内容" v-model="jvm22"></el-input>
+					<br>
+					<span style='margin-right: 15px;'>metrics_path:</span>
+					<el-input placeholder="请输入内容" v-model="jvm33"></el-input>
+					<br>
+					<span style='margin-right: 15px;'>params:</span>
+					<el-select v-model="value" placeholder="module">
+						<el-option
+								v-for="item in options"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+					<br>
+					<span style='margin-bottom: 10px;'>static_configs:</span><br>
+					<el-button type="primary" class='add' style='top: 185px;left: 130px;' size="mini" @click='addDomain'>增加一条static配置信息</el-button>
+					<div class='tar'>
+						<el-form v-for="(domain, index) in dynamicValidateForm.domains" :model="dynamicValidateForm" id='more' style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+							<el-collapse v-model="activeNames" id='clone' @change="handleChange">
+								<el-collapse-item title="配置static_configs" name="1">
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
+										<option value="bloan-rcpm1">bloan-rcpm1</option>
+										<option value="bloan-rcpm2">bloan-rcpm2</option>
+										<option value="bloan-rcpm3">bloan-rcpm3</option>
+										<option value="bloan-rcpm4">bloan-rcpm4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select style='margin-bottom:5px;'>
+										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<br>
+									<input type="button" value='targets:' disabled style='width: 60px;font-size: 14px'>
+									<input type="text" id='addurl' style='margin-bottom: 10px;' placeholder='请输入IP地址+端口信息'>
+									<em class='addurl' @click="addurl">+</em>
+									<br>
+									<ul id='list'></ul>
+								</el-collapse-item>
+							</el-collapse>
+						</el-form>
+					</div>
 				</div>
+				
+				
+				
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
@@ -166,6 +235,8 @@
 				filters: {
 					title: ''
 				},
+				or1:true,
+				or2:true,
         activeName: '1',
 				show:false,
 				hide:true,
@@ -174,7 +245,40 @@
 				page: 1,
 				listLoading: false,
 				sels: [],//列表选中列
-
+				
+				jvm1:'rcpm-common-jvm',
+        jvm2:'/bloan_common/metrics',
+        jvm3:'',
+        
+        jvm11:'bloan-telnet',
+        jvm22:'30s',
+        jvm33:'/probe',
+        
+        
+        options: [{
+          value: '选项1',
+          label: 'port_check'
+        }, {
+          value: '选项2',
+          label: 'port_check2'
+        }, {
+          value: '选项3',
+          label: 'port_check3'
+        }, {
+          value: '选项4',
+          label: 'port_check4'
+        }, {
+          value: '选项5',
+          label: 'port_check5'
+        }],
+        value: '',
+        
+        blackbox1:'bloan-telnet',
+        blackbox2:'30s',
+        blackbox3:'/probe',
+        blackbox4:'[port_check]',
+        blackbox5:'',
+				
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
@@ -191,7 +295,13 @@
 					birth: '',
 					addr: ''
 				},
-
+				//dynamicValidateForm: {
+        dynamicValidateForm: {
+          domains: [{
+            value: ''
+          }],
+          email: ''
+        },
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				addFormRules: {
@@ -206,18 +316,41 @@
 					age: 0,
 					birth: '',
 					addr: ''
-				}
+				},
+        
+        form: {
+          user: '1',
+          region: 'env'
+        },
+        form: {
+          user: '2',
+          region: 'system'
+        },
+        form: {
+          user: '3',
+          region: '3'
+        },
+        form: {
+          user: '4',
+          region: '4'
+        }
 
 			}
 		},
 		methods: {
       sel1(){
-        this.show=!false;
-        this.hide=false;
+        this.or1=false;
+        this.or2=!false;
+        
+        document.getElementsByClassName('jvm')[0].style.display='block';
+        document.getElementsByClassName('blackbox')[0].style.display='none';
       },
       sel2(){
-        this.show=false;
-        this.hide=true;
+        this.or1=!false;
+        this.or2=false;
+  
+        document.getElementsByClassName('jvm')[0].style.display='none';
+        document.getElementsByClassName('blackbox')[0].style.display='block';
       },
       filterTag(value, row) {
         return row.tag === value;
@@ -268,11 +401,14 @@
 			},
 			//显示编辑界面
 			handleEdit: function (index, row) {
+        this.or1 = true;
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
 			},
 			//显示新增界面
 			handleAdd: function () {
+        this.show=false;
+        this.hide=true;
 				this.addFormVisible = true;
 				this.addForm = {
 					name: '',
@@ -354,7 +490,46 @@
 				}).catch(() => {
 
 				});
-			}
+			},
+   
+			//重置
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      },
+			//删除
+      removeDomain(item) {
+        var index = this.dynamicValidateForm.domains.indexOf(item)
+        if (index !== -1) {
+          this.dynamicValidateForm.domains.splice(index, 1)
+        }
+      },
+			//新增
+      addDomain() {
+        this.dynamicValidateForm.domains.push({
+          value: '',
+          key: Date.now()
+        });
+      },
+			
+			//添加url地址
+      addurl(){
+        var li = document.createElement('li');
+        li.innerText = document.querySelector('#addurl').value;
+        document.querySelector('#list').appendChild(li);
+        document.querySelector('#addurl').value='';
+        var button = document.createElement('button');
+        button.innerHTML='删除';
+        li.appendChild(button);
+        button.style.marginLeft='30px';
+        button.style.color='red';
+        button.style.border='none';
+        button.style.backgroundColor='#fff';
+        button.style.cursor='pointer';
+				button.onclick=function () {
+					var parent = this.parentNode;
+					parent.innerHTML=''
+        }
+      },
 		},
 		mounted() {
 			this.getUsers();
@@ -364,12 +539,92 @@
 </script>
 
 <style scoped>
+	*{
+		list-style: none;
+	}
+	ul{
+		margin: 0;
+		margin-left: -30px;
+	}
 	.jvm{
-		height: 300px;
-		margin-left: 40px;
+		width: 590px;
+		position: relative;
+		left: 50%;
+		transform: translateX(-47.5%);
+		display: none;
+		border: 1px solid #dddddd;
+		padding: 10px;
 	}
 	.blackbox{
-		height:300px;
-		margin-left: 40px;
+		width: 590px;
+		position: relative;
+		left: 50%;
+		transform: translateX(-47.5%);
+		display: none;
+		border: 1px solid #dddddd;
+		padding: 10px;
+	}
+	.el-input{
+		width: 300px;
+		margin-bottom: 5px;
+	}
+	.el-input template{
+		width: 200px;
+	}
+	.jvm span{
+		display: inline-block;
+		width: 100px;
+		font-size: 16px;
+		margin-top: 10px;
+	}
+	.tar{
+		/*margin-left: 3px;*/
+	}
+	.new{
+		position: relative;
+		top: -55px;
+	}
+	.labels{
+		margin-left: 22px;
+		margin-bottom: 10px;
+		display: inline-block;
+	}
+	.tar span{
+		font-size: 14px;
+	}
+	i{
+		font-style: normal;
+		color: red;
+	}
+	input{
+		width: 200px;
+	}
+	em{
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		cursor: pointer;
+		margin-left: 10px;
+		font-size: 20px;
+	}
+	em:hover{
+		color: #11b95c;
+	}
+	.add{
+		position: absolute;
+		left: 120px;
+		top: 105px;
+	}
+	ul li .del{
+		display: inline-block;
+		font-size: 10px;
+		width: 30px;
+		padding: 2px;
+		margin-left: 30px;
+		cursor: pointer;
+		color: red;
+	}
+	.el-table-filter{
+		left: 300px;
 	}
 </style>

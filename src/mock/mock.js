@@ -112,11 +112,12 @@ export default {
 
     //编辑用户
     mock.onGet('/user/edit').reply(config => {
-      let { id, name, addr, age, birth, sex } = config.params;
+      let { id, name, addr, age, birth, sex, type } = config.params;
       _Users.some(u => {
         if (u.id === id) {
           u.name = name;
           u.addr = addr;
+          u.type = type;
           u.age = age;
           u.birth = birth;
           u.sex = sex;
