@@ -54,21 +54,122 @@
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="Type">
-					<el-radio-group v-model="editForm.sex">
-						<el-radio class="radio" :label="1">Jvm</el-radio>
-						<el-radio class="radio" :label="0">Blackbox</el-radio>
-					</el-radio-group>
+				<el-form-item label="TYPE:">
+				<span class="wrapper">
+    				<el-button :plain="or1" type="success" @click='sel1'>Jvm</el-button>
+    				<el-button :plain="or2" type="success" @click='sel2'>Blackbox</el-button>
+  			</span>
 				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
-				</el-form-item>
+				<!--jvm-->
+				<div class='jvm'>
+					<span>job_name:</span>
+					<el-input placeholder="请输入内容" v-model="jvm1"></el-input>
+					<br>
+					<span>metrics_path:</span>
+					<el-input placeholder="请输入内容" v-model="jvm2"></el-input>
+					<br>
+					<span style='margin-bottom: 10px;'>static_configs:</span><br>
+					<el-button type="primary" class='add' size="mini" @click='addDomain1'>增加一条static配置信息</el-button>
+					<div class='tar'>
+						<el-form v-for="(domain, index) in dynamicValidateForm.domains1" :model="dynamicValidateForm" id='more' style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+							<el-collapse v-model="activeNames"  @change="handleChange">
+								<el-collapse-item title="配置static_configs" name="1">
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
+										<option value="bloan-rcpm1">bloan-rcpm1</option>
+										<option value="bloan-rcpm2">bloan-rcpm2</option>
+										<option value="bloan-rcpm3">bloan-rcpm3</option>
+										<option value="bloan-rcpm4">bloan-rcpm4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select style='margin-bottom:5px;'>
+										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+								</el-collapse-item>
+							</el-collapse>
+						</el-form>
+					</div>
+				</div>
+				
+				<!--blackbox-->
+				<div class='blackbox jvm'>
+					<span style='margin-right: 15px;'>job_name:</span>
+					<el-input placeholder="请输入内容" v-model="jvm11"></el-input>
+					<br>
+					<span style='margin-right: 15px;'>scrape_interval:</span>
+					<el-input placeholder="请输入内容" v-model="jvm22"></el-input>
+					<br>
+					<span style='margin-right: 15px;'>metrics_path:</span>
+					<el-input placeholder="请输入内容" v-model="jvm33"></el-input>
+					<br>
+					<span style='margin-right: 15px;'>params:</span>
+					<el-select v-model="value" placeholder="module">
+						<el-option
+								v-for="item in options"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value">
+						</el-option>
+					</el-select>
+					<br>
+					<span style='margin-bottom: 10px;'>static_configs:</span><br>
+					<el-button type="primary" class='add' style='top: 185px;left: 130px;' size="mini" @click='addDomain2'>增加一条static配置信息</el-button>
+					<div class='tar'>
+						<el-form v-for="(domain, index) in dynamicValidateForm.domains2" :model="dynamicValidateForm" id='more' style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+							<el-collapse v-model="activeNames" id='clone' @change="handleChange">
+								<el-collapse-item title="配置static_configs" name="1">
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
+										<option value="bloan-rcpm1">bloan-rcpm1</option>
+										<option value="bloan-rcpm2">bloan-rcpm2</option>
+										<option value="bloan-rcpm3">bloan-rcpm3</option>
+										<option value="bloan-rcpm4">bloan-rcpm4</option>
+									</select>
+									<select>
+										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+									<select style='margin-bottom:5px;'>
+										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
+										<option value="prod1">prod1</option>
+										<option value="prod2">prod2</option>
+										<option value="prod3">prod3</option>
+										<option value="prod4">prod4</option>
+									</select>
+								</el-collapse-item>
+							</el-collapse>
+						</el-form>
+					</div>
+				</div>
+				
+				
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
@@ -99,50 +200,64 @@
 					<el-input placeholder="请输入内容" v-model="jvm2"></el-input>
 					<br>
 					<span style='margin-bottom: 10px;'>static_configs:</span><br>
-					<el-button type="primary" class='add' size="mini" @click='addDomain'>增加一条static配置信息</el-button>
+					<el-button type="primary" class='add' size="mini" @click='addDomain1'>增加一条static配置信息</el-button>
 					<div class='tar'>
-						<el-form v-for="(domain, index) in dynamicValidateForm.domains" :model="dynamicValidateForm" id='more' style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-							<el-collapse v-model="activeNames" id='clone' @change="handleChange">
+						<el-form v-for="(domain, index) in dynamicValidateForm.domains1" :model="dynamicValidateForm"  style='margin-left: 4px;position: relative' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic" >
+							<el-collapse v-model="activeNames" accordion>
+								<!--添加删除功能-->
+								<el-button @click.prevent="removeDomain(activeNames)" class='remove_static_configs'>删除</el-button>
 								<el-collapse-item title="配置static_configs" name="1">
 									<select>
 										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
 										<option value="prod1">prod1</option>
 										<option value="prod2">prod2</option>
-										<option value="prod3">prod3</option>
-										<option value="prod4">prod4</option>
 									</select>
 									<select>
 										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
 										<option value="bloan-rcpm1">bloan-rcpm1</option>
-										<option value="bloan-rcpm2">bloan-rcpm2</option>
-										<option value="bloan-rcpm3">bloan-rcpm3</option>
-										<option value="bloan-rcpm4">bloan-rcpm4</option>
 									</select>
 									<select>
 										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
 										<option value="prod1">prod1</option>
-										<option value="prod2">prod2</option>
-										<option value="prod3">prod3</option>
-										<option value="prod4">prod4</option>
 									</select>
-									<select style='margin-bottom:5px;'>
+									<select style='margin-bottom:20px;'>
 										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
 										<option value="prod1">prod1</option>
-										<option value="prod2">prod2</option>
-										<option value="prod3">prod3</option>
-										<option value="prod4">prod4</option>
 									</select>
 									<br>
-									<input type="button" value='targets:' disabled style='width: 60px;font-size: 14px'>
-									<input type="text" id='addurl' style='margin-bottom: 10px;' placeholder='请输入IP地址+端口信息'>
-									<em class='addurl' @click="addurl">+</em>
-									<br>
-									<ul id='list'></ul>
+									
+									
+									<!--添加域名-->
+									<div class='yuming'>
+										<el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+											<el-form-item
+													v-for="(domain, index) in dynamicValidateForm.domains3"
+													:label="'域名:端口' + index"
+													:key="domain.key"
+													:prop="'domains.' + index + '.value'"
+													:rules="{required: true, message: '域名不能为空', trigger: 'blur'}">
+												<el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
+											</el-form-item>
+											<el-form-item>
+												<el-button @click="addDomain3" class='addym'>新增域名</el-button>
+												
+											</el-form-item>
+										</el-form>
+									</div>
 								</el-collapse-item>
 							</el-collapse>
 						</el-form>
 					</div>
+					
+					<!--编辑器-->
+					<span style='margin-bottom: 10px;'>relabel_configs:</span><br>
+					<div class='editer'>
+						<!-- quill-editor插件标签 分别绑定各个事件-->
+						<quill-editor v-model="content" ref="myQuillEditor" :options="editorOption">
+						</quill-editor>
+					</div>
 				</div>
+				
 				
 				
 				
@@ -168,10 +283,10 @@
 					</el-select>
 					<br>
 					<span style='margin-bottom: 10px;'>static_configs:</span><br>
-					<el-button type="primary" class='add' style='top: 185px;left: 130px;' size="mini" @click='addDomain'>增加一条static配置信息</el-button>
+					<el-button type="primary" class='add' style='top: 185px;left: 130px;' size="mini" @click='addDomain2'>增加一条static配置信息</el-button>
 					<div class='tar'>
-						<el-form v-for="(domain, index) in dynamicValidateForm.domains" :model="dynamicValidateForm" id='more' style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-							<el-collapse v-model="activeNames" id='clone' @change="handleChange">
+						<el-form v-for="(domain, index) in dynamicValidateForm.domains2" :model="dynamicValidateForm" style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
+							<el-collapse v-model="activeNames"  @change="handleChange">
 								<el-collapse-item title="配置static_configs" name="1">
 									<select>
 										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
@@ -201,12 +316,6 @@
 										<option value="prod3">prod3</option>
 										<option value="prod4">prod4</option>
 									</select>
-									<br>
-									<input type="button" value='targets:' disabled style='width: 60px;font-size: 14px'>
-									<input type="text" id='addurl' style='margin-bottom: 10px;' placeholder='请输入IP地址+端口信息'>
-									<em class='addurl' @click="addurl">+</em>
-									<br>
-									<ul id='list'></ul>
 								</el-collapse-item>
 							</el-collapse>
 						</el-form>
@@ -286,21 +395,30 @@
 						{ required: true, message: '请输入姓名', trigger: 'blur' }
 					]
 				},
+        
+        //编辑器设置
+        editorOption: {
+          modules: {
+            toolbar: ['code-block']
+          }
+				},
+				
 				//编辑界面数据
 				editForm: {
 					id: 0,
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					name: ''
 				},
 				//dynamicValidateForm: {
         dynamicValidateForm: {
-          domains: [{
+          domains1: [{
             value: ''
           }],
-          email: ''
+          domains2: [{
+            value: ''
+          }],
+          domains3: [{
+            value: ''
+          }]
         },
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
@@ -311,11 +429,7 @@
 				},
 				//新增界面数据
 				addForm: {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					name: ''
 				},
         
         form: {
@@ -411,11 +525,7 @@
         this.hide=true;
 				this.addFormVisible = true;
 				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					name: ''
 				};
 			},
 			//编辑
@@ -491,45 +601,33 @@
 
 				});
 			},
-   
-			//重置
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      },
+			
 			//删除
       removeDomain(item) {
-        var index = this.dynamicValidateForm.domains.indexOf(item)
+        var index = this.dynamicValidateForm.domains3.indexOf(item)
         if (index !== -1) {
-          this.dynamicValidateForm.domains.splice(index, 1)
+          this.dynamicValidateForm.domains3.splice(index, 1)
         }
       },
 			//新增
-      addDomain() {
-        this.dynamicValidateForm.domains.push({
+      addDomain1() {
+        this.dynamicValidateForm.domains1.push({
+          value: '1',
+          key: Date.now()
+        });
+      },
+      addDomain2() {
+        this.dynamicValidateForm.domains2.push({
           value: '',
           key: Date.now()
         });
       },
-			
-			//添加url地址
-      addurl(){
-        var li = document.createElement('li');
-        li.innerText = document.querySelector('#addurl').value;
-        document.querySelector('#list').appendChild(li);
-        document.querySelector('#addurl').value='';
-        var button = document.createElement('button');
-        button.innerHTML='删除';
-        li.appendChild(button);
-        button.style.marginLeft='30px';
-        button.style.color='red';
-        button.style.border='none';
-        button.style.backgroundColor='#fff';
-        button.style.cursor='pointer';
-				button.onclick=function () {
-					var parent = this.parentNode;
-					parent.innerHTML=''
-        }
-      },
+      addDomain3() {
+        this.dynamicValidateForm.domains3.push({
+          value: '',
+          key: Date.now()
+        });
+      }
 		},
 		mounted() {
 			this.getUsers();
@@ -578,7 +676,7 @@
 		margin-top: 10px;
 	}
 	.tar{
-		/*margin-left: 3px;*/
+		margin-left: -4px;
 	}
 	.new{
 		position: relative;
@@ -599,32 +697,31 @@
 	input{
 		width: 200px;
 	}
-	em{
-		display: inline-block;
-		width: 30px;
-		height: 30px;
-		cursor: pointer;
-		margin-left: 10px;
-		font-size: 20px;
-	}
-	em:hover{
-		color: #11b95c;
-	}
 	.add{
 		position: absolute;
 		left: 120px;
 		top: 105px;
 	}
-	ul li .del{
-		display: inline-block;
-		font-size: 10px;
-		width: 30px;
-		padding: 2px;
-		margin-left: 30px;
-		cursor: pointer;
-		color: red;
+	.yuming{
+		font-size: 12px;
 	}
-	.el-table-filter{
-		left: 300px;
+	.el-form-item.is-required{
+		margin-bottom: 2px;
+		font-size: 12px;
+	}
+	.addym{
+		font-size: 14px;
+		margin-left: -90px;
+		padding: 5px;
+	}
+	.static_configs{
+		margin-bottom: 30px;
+	}
+	.remove_static_configs{
+		font-size: 12px;
+		position: absolute;
+		left: 200px;
+		top: 7px;
+		border: none;
 	}
 </style>
