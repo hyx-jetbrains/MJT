@@ -4,28 +4,35 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" placeholder="告警信息"></el-input>
+					<el-input v-model="filters.name" placeholder="标题"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button type="primary" v-on:click="getUsers">标题查询</el-button>
 				</el-form-item>
-
-				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
-				</el-form-item>
+				<div class="block">
+					<el-date-picker
+							format='yyyy-MM-dd HH:mm:ss'
+							v-model="value3"
+							type="datetimerange"
+							placeholder="选择时间范围">
+					</el-date-picker>
+					<el-button type="primary" @click="gettimedata" class='timebtn'>时间查询</el-button>
+				</div>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users"   highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%">
 			<!--单选框-->
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="index" type="index" label="序号" width="110" sortable>
+			<!--<el-table-column prop="index" type="index" label="序号" width="110" sortable>-->
+			<!--</el-table-column>-->
+			<el-table-column prop="time" label="告警时间" width="195" sortable>
 			</el-table-column>
-			<el-table-column prop="name" label="告警信息" width="470" sortable>
+			<el-table-column prop="name" label="告警标题" width="500">
 			</el-table-column>
-			<el-table-column prop="tag" label="类型" width="350" :formatter="formatType" :filters="[{ text: 'Jvm', value: 0 }, { text: 'Blackbox', value: 1 }]" :filter-method="filterTag" filter-placement="">
+			<el-table-column prop="tag" label="告警状态" width="160" :formatter="formatType" :filters="[{ text: 'Jvm', value: 0 }, { text: 'Blackbox', value: 1 }]" :filter-method="filterTag" filter-placement="">
 				<template scope="scope">
 					<el-tag
 							:type="scope.row.tag === 0 ? 'primary' : 'success'"
@@ -33,32 +40,41 @@
 					</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" width="200">
+			<el-table-column prop="tag" label="告警类型" width="160" :formatter="formatType" :filters="[{ text: 'Jvm', value: 0 }, { text: 'Blackbox', value: 1 }]" :filter-method="filterTag" filter-placement="">
 				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-tag
+							:type="scope.row.tag === 0 ? 'primary' : 'success'"
+							close-transition>{{scope.row.tag}}
+					</el-tag>
+				</template>
+			</el-table-column>
+			<el-table-column label="操作" width="100">
+				<template scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">详细信息</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 
-		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false" class='tc'>
+		<!--查看界面-->
+		<el-dialog title="详细信息" v-model="editFormVisible" :close-on-click-modal="false" class='tc'>
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+				<el-form-item label="标题：" prop="title">
+					{{editForm.name}}
 				</el-form-item>
-				<el-form-item label="TYPE:">
-				<span class="wrapper">
-    				<el-button :plain="or1" type="success" @click='sel1'>Jvm</el-button>
-    				<el-button :plain="or2" type="success" @click='sel2'>Blackbox</el-button>
-  			</span>
+				<el-form-item label="时间：" prop="time">
+					{{editForm.time}}
+				</el-form-item>
+				<el-form-item label="状态：" prop="status">
+					{{editForm.status}}
+				</el-form-item>
+				<el-form-item label="类型：" prop="status">
+					jvm
 				</el-form-item>
 				<!--jvm-->
 				<div class='jvm'>
@@ -176,161 +192,6 @@
 				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
 			</div>
 		</el-dialog>
-
-		<!--新增界面-->
-		<el-dialog title="新增配置" v-model="addFormVisible" :close-on-click-modal="true" >
-			<el-form :model="addForm" label-width="50px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="标题:" prop="title">
-					<el-input v-model="addForm.name" auto-complete="on"></el-input>
-				</el-form-item>
-				<el-form-item label="TYPE:">
-				<span class="wrapper">
-    				<el-button :plain="or1" type="success" @click='sel1'>Jvm</el-button>
-    				<el-button :plain="or2" type="success" @click='sel2'>Blackbox</el-button>
-  			</span>
-				</el-form-item>
-				
-				
-				<!--jvm-->
-				<div class='jvm'>
-					<span>job_name:</span>
-					<el-input placeholder="请输入内容" v-model="jvm1"></el-input>
-					<br>
-					<span>metrics_path:</span>
-					<el-input placeholder="请输入内容" v-model="jvm2"></el-input>
-					<br>
-					<span style='margin-bottom: 10px;'>static_configs:</span><br>
-					<el-button type="primary" class='add' size="mini" @click='addDomain1'>增加一条static配置信息</el-button>
-					<div class='tar'>
-						<el-form v-for="(domain, index) in dynamicValidateForm.domains1" :model="dynamicValidateForm"  style='margin-left: 4px;position: relative' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic" >
-							<el-collapse v-model="activeNames" accordion>
-								<!--添加删除功能-->
-								<el-button @click.prevent="removeDomain(activeNames)" class='remove_static_configs'>删除</el-button>
-								<el-collapse-item title="配置static_configs" name="1">
-									<select>
-										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
-										<option value="prod1">prod1</option>
-										<option value="prod2">prod2</option>
-									</select>
-									<select>
-										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
-										<option value="bloan-rcpm1">bloan-rcpm1</option>
-									</select>
-									<select>
-										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
-										<option value="prod1">prod1</option>
-									</select>
-									<select style='margin-bottom:20px;'>
-										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
-										<option value="prod1">prod1</option>
-									</select>
-									<br>
-									
-									
-									<!--添加域名-->
-									<div class='yuming'>
-										<el-form :model="dynamicValidateForm" ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-											<el-form-item
-													v-for="(domain, index) in dynamicValidateForm.domains3"
-													:label="'域名:端口' + index"
-													:key="domain.key"
-													:prop="'domains.' + index + '.value'"
-													:rules="{required: true, message: '域名不能为空', trigger: 'blur'}">
-												<el-input v-model="domain.value"></el-input><el-button @click.prevent="removeDomain(domain)">删除</el-button>
-											</el-form-item>
-											<el-form-item>
-												<el-button @click="addDomain3" class='addym'>新增域名</el-button>
-												
-											</el-form-item>
-										</el-form>
-									</div>
-								</el-collapse-item>
-							</el-collapse>
-						</el-form>
-					</div>
-					
-					<!--编辑器-->
-					<span style='margin-bottom: 10px;'>relabel_configs:</span><br>
-					<div class='editer'>
-						<!-- quill-editor插件标签 分别绑定各个事件-->
-						<quill-editor v-model="content" ref="myQuillEditor" :options="editorOption">
-						</quill-editor>
-					</div>
-				</div>
-				
-				
-				
-				
-				<!--blackbox-->
-				<div class='blackbox jvm'>
-					<span style='margin-right: 15px;'>job_name:</span>
-					<el-input placeholder="请输入内容" v-model="jvm11"></el-input>
-					<br>
-					<span style='margin-right: 15px;'>scrape_interval:</span>
-					<el-input placeholder="请输入内容" v-model="jvm22"></el-input>
-					<br>
-					<span style='margin-right: 15px;'>metrics_path:</span>
-					<el-input placeholder="请输入内容" v-model="jvm33"></el-input>
-					<br>
-					<span style='margin-right: 15px;'>params:</span>
-					<el-select v-model="value" placeholder="module">
-						<el-option
-								v-for="item in options"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value">
-						</el-option>
-					</el-select>
-					<br>
-					<span style='margin-bottom: 10px;'>static_configs:</span><br>
-					<el-button type="primary" class='add' style='top: 185px;left: 130px;' size="mini" @click='addDomain2'>增加一条static配置信息</el-button>
-					<div class='tar'>
-						<el-form v-for="(domain, index) in dynamicValidateForm.domains2" :model="dynamicValidateForm" style='margin-left: 4px;' ref="dynamicValidateForm" label-width="100px" class="demo-dynamic">
-							<el-collapse v-model="activeNames"  @change="handleChange">
-								<el-collapse-item title="配置static_configs" name="1">
-									<select>
-										<option value="env" style="color: #b6b6b6" disabled selected>env</option>
-										<option value="prod1">prod1</option>
-										<option value="prod2">prod2</option>
-										<option value="prod3">prod3</option>
-										<option value="prod4">prod4</option>
-									</select>
-									<select>
-										<option value="env" style="color: #b6b6b6" disabled selected>system</option>
-										<option value="bloan-rcpm1">bloan-rcpm1</option>
-										<option value="bloan-rcpm2">bloan-rcpm2</option>
-										<option value="bloan-rcpm3">bloan-rcpm3</option>
-										<option value="bloan-rcpm4">bloan-rcpm4</option>
-									</select>
-									<select>
-										<option value="env" style="color: #b6b6b6" disabled selected>component</option>
-										<option value="prod1">prod1</option>
-										<option value="prod2">prod2</option>
-										<option value="prod3">prod3</option>
-										<option value="prod4">prod4</option>
-									</select>
-									<select style='margin-bottom:5px;'>
-										<option value="env" style="color: #b6b6b6" disabled selected>type</option>
-										<option value="prod1">prod1</option>
-										<option value="prod2">prod2</option>
-										<option value="prod3">prod3</option>
-										<option value="prod4">prod4</option>
-									</select>
-								</el-collapse-item>
-							</el-collapse>
-						</el-form>
-					</div>
-				</div>
-				
-				
-				
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = true">比对</el-button>
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-			</div>
-		</el-dialog>
 	</section>
 </template>
 
@@ -429,6 +290,10 @@
 						{ required: true, message: '请输入姓名', trigger: 'blur' }
 					]
 				},
+				
+        value3: '',
+				
+				
 				//新增界面数据
 				addForm: {
 					name: ''
@@ -459,6 +324,9 @@
 			},
       content(){
       
+			},
+      gettimedata(){
+        alert(this.value3)
 			},
       sel1(){
         this.or1=false;
@@ -731,5 +599,12 @@
 		left: 200px;
 		top: 7px;
 		border: none;
+	}
+	.block{
+		margin-left: 20px;
+		display: inline-block;
+	}
+	.timebtn{
+		margin-left: 10px;
 	}
 </style>

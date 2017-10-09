@@ -1,4 +1,4 @@
 <template>
-	<section>page6...
+	<section>Prometheus 查询页面
 	</section>
 </template>

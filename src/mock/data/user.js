@@ -29,10 +29,11 @@ for (let i = 0; i < 86; i++) {
   Users.push(Mock.mock({
     id: Mock.Random.guid(),
     name: Mock.Random.title(),
+    cname:Mock.Random.cname(),
     addr: Mock.mock('@county(true)'),
     'age|18-60': 1,
-    birth: Mock.Random.date(),
-    tag: Mock.Random.integer(0, 1)
+    tag: Mock.Random.integer(0, 1),
+    time:Mock.Random.datetime('yyyy-MM-dd HH:mm:ss')
   }));
 }
 

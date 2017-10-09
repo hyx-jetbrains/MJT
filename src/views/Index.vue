@@ -6,17 +6,18 @@
 				<span class='tit animated flipInX'>{{collapsed?'':sysName}}</span>
 			</el-col>
 			<el-col :span="10" class="logo jiankong" :class="collapsed?'logo-collapse-width':'logo-width'">
-				<router-link class='link' to="Watch"><span class='tit animated flipInX'>监控管理</span></router-link>
-				<router-link class='link' to="Watch"><span class='tit animated flipInX'>作业平台</span></router-link>
-				<router-link class='link' to="Watch"><span class='tit animated flipInX'>服务拨测</span></router-link>
-				<router-link class='link' to="Watch"><span class='tit animated flipInX'>告警查询</span></router-link>
+				<router-link class='link' to="Dashboard"><span class='tit animated flipInX'>Dashboard</span></router-link>
+				<router-link class='link' to="Prometheus"><span class='tit animated flipInX'>Prometheus</span></router-link>
+				<router-link class='link' to="Watch"><span class='tit animated flipInX'>告警管理</span></router-link>
+				<router-link class='link' to="warn"><span class='tit animated flipInX'>告警查询</span></router-link>
+				<router-link class='link' to="UserGroup"><span class='tit animated flipInX'>用户组管理</span></router-link>
 			</el-col>
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
+						<el-dropdown-item>新建用户</el-dropdown-item>
+						<el-dropdown-item>新建组</el-dropdown-item>
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -145,7 +146,7 @@
 	.jiankong{
 		margin-left: 30px;
 		height: 50px;
-		width: 200px;
+		width: 250px;
 		line-height: 50px;
 		span{
 			font-size: 14px;
@@ -179,7 +180,7 @@
 		
 	}
 	.logo.jiankong.el-col.el-col-10.logo-width{
-		width: 400px;
+		width: 500px;
 		margin-left:-20px;
 	}
 	.container {
